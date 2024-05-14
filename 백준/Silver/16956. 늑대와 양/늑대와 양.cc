@@ -15,9 +15,7 @@ using namespace std;
 
 int r, c;
 int m[501][501];
-bool chk[501][501];
-vector<pair<int, int>> wolf;
-bool dfsEnd = false;
+vector<pair<int, int>> wolf, sheep;
 
 int mI[4] = { -1,0,1,0 };
 int mJ[4] = { 0,1,0,-1 };
@@ -40,31 +38,22 @@ void Print() {
 	}
 }
 
-void DFS(pair<int, int> stP) {
-	if (dfsEnd)return;
-
-	int nowI = stP.first;
-	int nowJ = stP.second;
-	int d = 0;
-
-	if (!chk[nowI][nowJ]) {
-		chk[nowI][nowJ] = 1;
+bool ChkSheep() {
+	for (int i = 0; i < sheep.size(); i++) {
+		int nowI = sheep[i].first;
+		int nowJ = sheep[i].second;
+		int d = 0;
 
 		while (d < 4) {
 			int tmpI = nowI + mI[d];
 			int tmpJ = nowJ + mJ[d];
 
-			if (Range(tmpI, tmpJ)) {
-				if (m[tmpI][tmpJ] == 1 && m[nowI][nowJ] == 2) { dfsEnd = true; return; }
-				
-				if ((m[tmpI][tmpJ] == 1 || m[tmpI][tmpJ] == 3) && m[nowI][nowJ] != 2) m[nowI][nowJ] = 3;
-
-				else if (!chk[tmpI][tmpJ]) DFS({ tmpI,tmpJ });
-			}
-
+			if (Range(tmpI, tmpJ) && m[tmpI][tmpJ] == 2)return true;
+            else if(Range(tmpI, tmpJ) && m[tmpI][tmpJ] == 0)m[tmpI][tmpJ] = 3;
 			d++;
 		}
 	}
+    return false;
 }
 
 int main() {
@@ -79,6 +68,7 @@ int main() {
 			cin >> a;
 			if (a == 'S') {
 				m[i][j] = 1;
+				sheep.push_back({ i,j });
 			}
 			else if (a == 'W') {
 				m[i][j] = 2;
@@ -89,10 +79,6 @@ int main() {
 
 	if (!wolf.size()) { Print(); return 0; }
 
-	for (int i = 0; i < wolf.size(); i++) {
-		DFS(wolf[i]);
-	}
-
-	if (dfsEnd)cout << 0;
-	else Print();
+	if (ChkSheep()) { cout << 0; return 0; }
+	Print();
 }
