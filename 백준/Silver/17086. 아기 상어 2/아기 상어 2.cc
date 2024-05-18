@@ -18,14 +18,6 @@ int dp[51][51];
 bool chk[51][51];
 vector<pair<int, int>> shark;
 
-struct info {
-	int x;
-	int y;
-	int value;
-
-	info(int a, int b, int c) : x(a), y(b), value(c) {}
-};
-
 int mI[8] = { -1,-1,0,1,1,1,0,-1 };
 int mJ[8] = { 0,1,1,1,0,-1,-1,-1 };
 
@@ -35,17 +27,16 @@ bool Range(int a, int b) {
 
 void BFS() {
 	for (int i = 0; i < shark.size(); i++) {
-		queue<info*> q;
-		info* tmp = new info(shark[i].first, shark[i].second, 0);
-		q.push(tmp);
+		queue<int> q;
+		q.push(shark[i].first);
+		q.push(shark[i].second);
 		chk[shark[i].first][shark[i].second] = 1;
 
 		while (!q.empty()) {
-			int nowI = q.front()->x;
-			int nowJ = q.front()->y;
-			int nowV = q.front()->value;
+			int nowI = q.front(); q.pop();
+			int nowJ = q.front(); q.pop();
+			int nowV = dp[nowI][nowJ];
 			int d = 0;
-			q.pop();
 
 			while (d < 8) {
 				int tmpI = nowI + mI[d];
@@ -54,8 +45,8 @@ void BFS() {
 				if (Range(tmpI, tmpJ) && !chk[tmpI][tmpJ] && (dp[tmpI][tmpJ] > nowV + 1)) {
 					chk[tmpI][tmpJ] = 1;
 					dp[tmpI][tmpJ] = nowV + 1;
-					tmp = new info(tmpI, tmpJ, nowV + 1);
-					q.push(tmp);
+					q.push(tmpI);
+					q.push(tmpJ);
 				}
 				d++;
 			}
