@@ -14,21 +14,16 @@
 using namespace std;
 
 int n, result;
-int chessboard[16][16];
-
-int row[16], column[16];
-
-bool Range(int a, int b) {
-	return a >= 1 && a <= n && b >= 1 && b <= n;
-}
+int queenArr[16];
+int column[16];
 
 bool Chk(int a, int b) {
-	if (row[a] || column[b] )return false;
+	if (column[b])return false;
 
-	for (int i = 1; i <= a; i++) {
-		if (Range(a - i, b - i) && chessboard[a - i][b - i])return false;
-		if (Range(a - i, b + i) && chessboard[a - i][b + i])return false;
+	for (int i = 1; i < a; i++) {
+		if (abs(a - i) == abs(b - queenArr[i]))return false;
 	}
+
 	return true;
 }
 
@@ -40,13 +35,12 @@ void Queen(int p, int queenN) {
 
 	for (int i = 1; i <= n; i++) {
 		if (Chk(nowI, i)) {
-			chessboard[nowI][i] = 1;
-			row[nowI] = 1;
+			queenArr[nowI] = i;
 			column[i] = 1;
 
 			Queen(nowI, queenN - 1);
-			chessboard[nowI][i] = 0;
-			row[nowI] = 0;
+
+			queenArr[nowI] = 0;
 			column[i] = 0;
 		}
 	}
