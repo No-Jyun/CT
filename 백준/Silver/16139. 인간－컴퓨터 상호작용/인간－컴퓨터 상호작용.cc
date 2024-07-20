@@ -14,6 +14,7 @@
 using namespace std;
 
 string s;
+int num[27][200001];
 
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -24,12 +25,22 @@ int main() {
 	
 	int t;
 	cin >> t;
+
+	for (int i = 0; i < s.size(); i++) {
+		for (int j = 1; j <= 26; j++) {
+			if (j == s[i] - 'a' + 1) {
+				num[j][i + 1] = num[j][i] + 1;
+			}
+			else num[j][i + 1] = num[j][i];
+		}
+	}
+
 	while (t--) {
 		char target;
 		int l, r;
 		cin >> target >> l >> r;
 
-		int answer = count(s.begin() + l, s.begin() + r + 1, target);
+		int answer = num[target - 'a' + 1][r + 1] - num[target - 'a' + 1][l];
 
 		cout << answer << '\n';
 	}
