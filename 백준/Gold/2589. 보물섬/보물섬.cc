@@ -18,7 +18,6 @@ int zido[51][51];
 int chk[51][51];
 int mI[4] = { -1,0,1,0 };
 int mJ[4] = { 0,1,0,-1 };
-vector<pair<int, int>> land;
 int result;
 
 bool Range(int a, int b) {
@@ -64,14 +63,17 @@ int main() {
 		for (int j = 1; j <= m; j++) {
 			if (s[j - 1] == 'L') {
 				zido[i][j] = 1;
-				land.push_back({ i,j });
 			}
 		}
 	}
 
-	for (int i = 0; i < land.size(); i++) {
-		fill(chk[0], chk[51], -1);
-		BFS(land[i]);
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			if (zido[i][j]) {
+				fill(chk[0], chk[51], -1);
+				BFS({ i,j });
+			}
+		}
 	}
 	cout << result;
 }
