@@ -15,9 +15,10 @@ using namespace std;
 
 int n;
 int modular = 1000000000;
-int maxN;
-int arr[1000001][20];
-int result = 0;
+int maxN = 0;
+int arr[1000001];
+vector<int> v;
+int indexTimes = 0;
 
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -25,31 +26,32 @@ int main() {
 	cout.tie(NULL);
 
 	cin >> n;
-	for (int i = 0; i < 20; i++) {
-		int n2 = pow(2, i);
-		if (n2 <= n) {
-			maxN = i;
-			arr[n2][i] = 1;
-		}
-	}
 
-	for (int i = 1; i < n; i++) {
-		int addSum = 0;
-		for (int j = 0; j <= maxN; j++) {
-			addSum += arr[i][j];
+	arr[1] = 1;
+	arr[2] = 2;
+	int addSum = 2;
+	v.push_back(2);
+	int times = 0;
+	for (int i = 4; i <= n; i += 2) {
+		arr[i] = arr[i - 2] + addSum;
+		arr[i] %= modular;
+
+		if (times == 1) {
+			addSum += v[maxN];
 			addSum %= modular;
+			v.push_back(addSum);
 
-			int plusMoney = i + pow(2, j);
-			if (plusMoney <= n) {
-				arr[plusMoney][j] += addSum;
-				arr[plusMoney][j] %= modular;
+			if (indexTimes == 1) {
+				maxN++;
+				indexTimes = 0;
 			}
+			else indexTimes++;
+
+			times = 0;
 		}
+		else times++;
 	}
 
-	for (int j = 0; j <= maxN; j++) {
-		result += arr[n][j];
-		result %= modular;
-	}
-	cout << result;
+	if (n != 1 && n % 2)n--;
+	cout << arr[n];
 }
