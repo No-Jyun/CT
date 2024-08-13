@@ -14,32 +14,25 @@ int index = 9;
 queue<string> q;
 
 void Go() {
-	while (1) {
-		queue<string> tmp;
+	while (!q.empty()) {
+		string nowN = q.front();
+		q.pop();
+		int lastN = nowN[nowN.size() - 1] - '0';
 
-		while (!q.empty()) {
-			string nowN = q.front();
-			q.pop();
-			int lastN = nowN[nowN.size() - 1] - '0';
+		for (int i = 0; i <= 9 && lastN > i; i++) {
+			index++;
+			q.push(nowN + to_string(i));
 
-			for (int i = 0; i <= 9 && lastN > i; i++) {
-				index++;
-				tmp.push(nowN + to_string(i));
-
-				if (index == n) {
-					cout << nowN + to_string(i);
-					return;
-				}
+			if (index == n) {
+				cout << nowN + to_string(i);
+				return;
 			}
 		}
-		q = tmp;
-
-		if (tmp.empty()) {
-			cout << -1;
-			return;
-		}
 	}
+	cout << -1;
+	return;
 }
+
 
 int main() {
 	ios_base::sync_with_stdio(false);
