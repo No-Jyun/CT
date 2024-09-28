@@ -16,25 +16,18 @@ using namespace std;
 
 int n, result;
 vector<pair<int, int>> edges[10001];
-int chk[10001];
+bool chk[10001];
 
-void BFS(int index) {
-	fill(chk, chk + n + 1, -1);
-	chk[index] = 0;
-	queue<int> q;
-	q.push(index);
-	
-	while (!q.empty()) {
-		int nowI = q.front();
-		q.pop();
+void DFS(int index, int sum) {
+	chk[index] = 1;
 
-		result = max(result, chk[nowI]);
+	if (edges[index].size() == 1) {
+		result = max(result, sum);
+	}
 
-		for (int i = 0; i < edges[nowI].size(); i++) {
-			if (chk[edges[nowI][i].first] == -1) {
-				chk[edges[nowI][i].first] = chk[nowI] + edges[nowI][i].second;
-				q.push(edges[nowI][i].first);
-			}
+	for (int i = 0; i < edges[index].size(); i++) {
+		if (!chk[edges[index][i].first]) {
+			DFS(edges[index][i].first, sum + edges[index][i].second);
 		}
 	}
 }
@@ -53,7 +46,10 @@ int main() {
 	}
 
 	for (int i = 1; i <= n; i++) {
-		if (edges[i].size() == 1) BFS(i);
+		if (edges[i].size() == 1) {
+			fill(chk, chk + n + 1, 0);
+			DFS(i, 0);
+		}
 	}
 	cout << result;
 }
