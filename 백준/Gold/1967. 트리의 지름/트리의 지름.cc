@@ -53,7 +53,7 @@ int main() {
 	}
 
 	for (int i = 1; i <= n; i++) {
-		BFS(i);		
+		if (edges[i].size() == 1) BFS(i);
 	}
 	cout << result;
 }
