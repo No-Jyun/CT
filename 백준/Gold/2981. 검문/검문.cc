@@ -14,15 +14,19 @@
 #define INTMAX 2147483647
 using namespace std;
 
-int n, a, b;
+int n, a;
 int arr[101];
+vector<int> v;
 
-bool Chk(int tm) {
-	int ba = arr[1] % tm;
-	for (int i = 1; i <= n; i++) {
-		if (ba != arr[i] % tm)return false;
+int GCD(int aa, int bb) {
+	if (aa > bb)swap(aa, bb);
+
+	while (bb % aa != 0) {
+		int t = aa;
+		aa = bb % t;
+		bb = t;
 	}
-	return true;
+	return aa;
 }
 
 int main() {
@@ -31,32 +35,24 @@ int main() {
 	cout.tie(NULL);
 
 	cin >> n;
-	for (int i = 1; i <= n; i++)cin >> arr[i];
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+	}
 	sort(arr, arr + n + 1);
 
-	if (n == 2) {
-		int t = arr[2] - arr[1];
-		for (int i = 2; i <= t; i++) {
-			if (t % i == 0) cout << i << ' ';
+	a = arr[2] - arr[1];
+	for (int i = 3; i <= n; i++) {
+		a = min(a, GCD(a, arr[i] - arr[i - 1]));
+	}
+
+	for (int i = 2; i <= sqrt(a); i++) {
+		if (a % i == 0) {
+			v.push_back(i);
+			if (a / i != i) v.push_back(a / i);
 		}
 	}
-	else {
-		a = INTMAX;
-		b = 0;
-		for (int i = 2; i <= n; i++) {
-			a = min(a, arr[i] - arr[i - 1]);
-			b = max(b, arr[i] - arr[i - 1]);
-		}
+	v.push_back(a);
+	sort(v.begin(), v.end());
 
-		while (b % a != 0) {
-			int t = a;
-			int tt = b % a;
-			b = max(t, tt);
-			a = min(t, tt);
-		}
-
-		for (int i = 2; i <= a; i++) {
-			if (Chk(i))cout << i << ' ';
-		}
-	}
+	for (int i = 0; i < v.size(); i++)cout << v[i] << ' ';
 }
