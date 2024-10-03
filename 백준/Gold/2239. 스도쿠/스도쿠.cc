@@ -18,10 +18,6 @@ int sudoku[10][10];
 int stX, stY;
 bool trig = false;
 
-bool canRange(int a, int b) {
-	return a >= 1 && b >= 1 && a <= 9 && b <= 9;
-}
-
 pair<int, int> Range(int a, int b) {
 	if (a <= 3 && b <= 3)return { 1,1 };
 	if (a <= 3 && b <= 6)return { 1,4 };
@@ -55,8 +51,8 @@ void Go(int nowI, int nowJ) {
 
 	bool chk[10] = { 0, };
 	for (int i = 1; i <= 9; i++) {
-		if (canRange(i, nowJ))chk[sudoku[i][nowJ]] = 1;
-		if (canRange(nowI, i))chk[sudoku[nowI][i]] = 1;
+		chk[sudoku[i][nowJ]] = 1;
+		chk[sudoku[nowI][i]] = 1;
 	}
 
 	pair<int, int> t = Range(nowI, nowJ);
@@ -68,10 +64,8 @@ void Go(int nowI, int nowJ) {
 
 	for (int i = 1; i <= 9; i++) {
 		if (!chk[i]) {
-			chk[i] = 1;
 			sudoku[nowI][nowJ] = i;
 			Go(nowI, nowJ + 1);
-			chk[i] = 0;
 			sudoku[nowI][nowJ] = 0;
 		}
 	}
@@ -94,5 +88,4 @@ int main() {
 	}
 
 	Go(stX, stY);
-
 }
