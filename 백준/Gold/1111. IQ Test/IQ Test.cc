@@ -19,11 +19,6 @@ int arr[51];
 int a, b;
 
 void Ans() {
-	if (n == 1) {
-		cout << 'A';
-		return;
-	}
-
 	if (arr[1] == arr[2]) {
 		for (int i = 2; i <= n; i++) {
 			if (arr[i - 1] != arr[i]) {
@@ -34,11 +29,11 @@ void Ans() {
 		cout << arr[1];
 		return;
 	}
-    if(n==2){
-        cout << 'A';
-		return;
-    }
 
+	if (n <= 2) {
+		cout << 'A';
+		return;
+	}
 
 	if ((arr[3] - arr[2]) % (arr[2] - arr[1])) {
 		cout << 'B';
@@ -64,6 +59,7 @@ int main() {
 	cout.tie(NULL);
 
 	cin >> n;
+	fill(arr, arr + 51, -9999999);
 	for (int i = 1; i <= n; i++)cin >> arr[i];
 
 	Ans();
