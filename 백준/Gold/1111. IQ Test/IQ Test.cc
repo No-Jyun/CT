@@ -23,25 +23,22 @@ void Ans() {
 		cout << 'A';
 		return;
 	}
-	if (n == 2) {
-		if (arr[1] == arr[2]) cout << arr[1];
-		else cout << 'A';
-		return;
-	}
 
 	if (arr[1] == arr[2]) {
-		if (arr[2] == arr[3]) {
-			for (int i = 4; i <= n; i++) {
-				if (arr[i - 1] != arr[i]) {
-					cout << 'B';
-					return;
-				}
+		for (int i = 2; i <= n; i++) {
+			if (arr[i - 1] != arr[i]) {
+				cout << 'B';
+				return;
 			}
-			cout << arr[n];
 		}
-		else cout << 'B';
+		cout << arr[1];
 		return;
 	}
+    if(n==2){
+        cout << 'A';
+		return;
+    }
+
 
 	if ((arr[3] - arr[2]) % (arr[2] - arr[1])) {
 		cout << 'B';
