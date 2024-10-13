@@ -17,12 +17,12 @@ using namespace std;
 int n, m;
 vector<pair<int, int>> edges[201];
 int way[201][201];
-vector<int> chk[201];
+int chk[201];
 
 void BFS(int stI) {
 	priority_queue<vector<int>> q;
 	q.push({ 0,stI });
-	chk[stI] = { 0,stI };
+	chk[stI] = 0;
 
 	while (!q.empty()) {
 		vector<int> tmp = q.top();
@@ -35,23 +35,21 @@ void BFS(int stI) {
 			int tmpC = nowC + edges[nowI][i].second;
 			int tmpI = edges[nowI][i].first;
 
-			if (chk[tmpI][0] == -1) {
+			if (chk[tmpI] == -1) {
 				tmpV[0] = -tmpC;
 				tmpV.push_back(tmpI);
-				chk[tmpI] = tmpV;
+				chk[tmpI] = tmpC;
+				way[stI][tmpI] = tmpV[2];
 				q.push(tmpV);
 			}
-			else if (-chk[tmpI][0] > tmpC) {
+			else if (chk[tmpI] > tmpC) {
 				tmpV[0] = -tmpC;
 				tmpV.push_back(tmpI);
-				chk[tmpI] = tmpV;
+				chk[tmpI] = tmpC;
+				way[stI][tmpI] = tmpV[2];
 				q.push(tmpV);
 			}
 		}
-	}
-
-	for (int i = 1; i <= n; i++) {
-		if (i != stI)way[stI][i] = chk[i][2];
 	}
 }
 
@@ -69,7 +67,7 @@ int main() {
 	}
 
 	for (int i = 1; i <= n; i++) {
-		for (int i = 1; i <= n; i++)chk[i] = { -1 };
+		fill(chk, chk + n + 1, -1);
 		BFS(i);
 	}
 
