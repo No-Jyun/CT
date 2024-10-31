@@ -18,17 +18,6 @@ string a, b, c;
 int mlen;
 int arr[101][101][101];
 
-int ML(int ai, int bi, int ci) {
-	int l = 0;
-	if (ai == 0)return 0;
-	for (int i = 0; i < bi; i++) {
-		for (int j = 0; j < ci; j++) {
-			l = max(l, arr[ai - 1][i][j]);
-		}
-	}
-	return l;
-}
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
@@ -36,14 +25,15 @@ int main() {
 
 	cin >> a >> b >> c;
 
-	for (int i = 0; i < a.length(); i++) {
-		for (int j = 0; j < b.length(); j++) {
-			for (int k = 0; k < c.length(); k++) {
-				if (a[i] == b[j] && b[j] == c[k]) {
-					int len = ML(i, j, k);
-					arr[i][j][k] = len + 1;
+	for (int i = 1; i <= a.length(); i++) {
+		for (int j = 1; j <= b.length(); j++) {
+			for (int k = 1; k <= c.length(); k++) {
+				if (a[i - 1] == b[j - 1] && b[j - 1] == c[k - 1]) {
+					arr[i][j][k] = arr[i - 1][j - 1][k - 1] + 1;
 				}
-				else if (i != 0)arr[i][j][k] = arr[i - 1][j][k];
+				else arr[i][j][k] = max(arr[i - 1][j][k],
+					max(arr[i][j - 1][k], arr[i][j][k - 1]));
+
 				mlen = max(mlen, arr[i][j][k]);
 			}
 		}
