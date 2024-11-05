@@ -36,7 +36,6 @@ void DecChar() {
 		for (int j = arr[i].length() - 1; j >= 0; j--) {
 			charChk[arr[i][j] - 'A'] += score;
 			score *= 10;
-			score++;
 		}
 	}
 
