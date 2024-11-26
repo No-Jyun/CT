@@ -14,7 +14,6 @@
 #define INTMAX 2147483647
 using namespace std;
 
-map<int, int> m;
 int arr[2001];
 int n, result;
 
@@ -26,25 +25,30 @@ int main() {
 	cin >> n;
 	for (int i = 1; i <= n; i++) {
 		cin >> arr[i];
-		m[arr[i]]++;
 	}
+	sort(arr + 1, arr + n + 1);
 
 	for (int i = 1; i <= n; i++) {
-		for (int j = i + 1; j <= n; j++) {
-			int k = arr[i] + arr[j];
+		int l = 1, r = n;
 
-			bool isCal = false;
-			if (k == arr[i] && k == arr[j]) {
-				if (m[k] > 2) isCal = true;
-			}
-			else if (k == arr[i] || k == arr[j]) {
-				if (m[k] > 1) isCal = true;
-			}
-			else if (m[k]) isCal = true;
+		if (i == 1)l++;
+		if (i == n)r--;
 
-			if (isCal) {
-				result += m[k];
-				m[k] = 0;
+		while (l < r) {
+			int k = arr[l] + arr[r];
+			if (k == arr[i]) {
+				result++;
+				break;
+			}
+			if (k > arr[i]) {
+				do {
+					r--;
+				} while (r == i);
+			}
+			else {
+				do {
+					l++;
+				} while (l == i);
 			}
 		}
 	}
