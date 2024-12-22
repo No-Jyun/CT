@@ -22,10 +22,9 @@ bool C() {
 	for (int i = 1; i <= n; i++) {
 		for (int j = 1; j <= arr[i].size(); j++) {
 			string t = arr[i].substr(0, j);
-			auto it = m.insert({ t,1 });
-
-			if (!it.second) return false;
-			if (j != arr[i].size())m.erase(t);
+			
+			if (m[t])return false;
+			if (j == arr[i].size())m[t]++;
 		}
 	}
 	return true;
