@@ -25,26 +25,10 @@ bool Range(int a, int b) {
 }
 
 void DelChz() {
-	queue<pair<int, int>> q;
-
 	for (int i = 1; i <= n; i++) {
 		for (int j = 1; j <= m; j++) {
-			if (monun[i][j]) {
-				int t = 0;
-				for (int d = 0; d < 4; d++) {
-					int tmpI = i + mI[d];
-					int tmpJ = j + mJ[d];
-
-					if (Range(tmpI, tmpJ) && !monun[tmpI][tmpJ] && chk[tmpI][tmpJ])t++;
-				}
-				if (t >= 2)q.push({ i,j });
-			}
+			if (chk[i][j] <= -2)monun[i][j] = 0;
 		}
-	}
-
-	while (!q.empty()) {
-		monun[q.front().first][q.front().second] = 0;
-		q.pop();
 	}
 }
 
@@ -62,9 +46,12 @@ void ChkAir() {
 			int tmpI = nowI + mI[d];
 			int tmpJ = nowJ + mJ[d];
 
-			if (Range(tmpI, tmpJ) && !chk[tmpI][tmpJ] && !monun[tmpI][tmpJ]) {
-				chk[tmpI][tmpJ] = 1;
-				q.push({ tmpI,tmpJ });
+			if (Range(tmpI, tmpJ)) {
+				if (!monun[tmpI][tmpJ] && !chk[tmpI][tmpJ]) {
+					chk[tmpI][tmpJ] = 1;
+					q.push({ tmpI,tmpJ });
+				}
+				else if(monun[tmpI][tmpJ]) chk[tmpI][tmpJ]--;
 			}
 		}
 	}
