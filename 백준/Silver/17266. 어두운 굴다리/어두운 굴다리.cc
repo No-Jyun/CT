@@ -45,6 +45,9 @@ int StartSolve()
 
 int main()
 {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	cin >> n >> m;
 	cout << StartSolve();
 }
