@@ -16,7 +16,7 @@
 using namespace std;
 
 int n, m;
-vector<int> v;
+int maxN;
 
 int StartSolve()
 {
@@ -27,20 +27,20 @@ int StartSolve()
 
 		if (i == 0)
 		{
-			v.emplace_back(now - 0);
+			maxN = (now - 0);
 			continue;
 		}
 
 		int t = (now - ex) / 2;
 		if ((now - ex) % 2) t++;
-		v.emplace_back(t);
+
+		if (maxN < t) maxN = t;
+
 		ex = now;
-	}
-	v.emplace_back(n - ex);
+	}	
+	if (maxN < (n - ex)) maxN = n - ex;
 
-	sort(v.begin(), v.end());
-
-	return v[v.size() - 1];
+	return maxN;
 }
 
 int main()
