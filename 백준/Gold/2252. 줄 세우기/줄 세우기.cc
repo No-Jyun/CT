@@ -22,6 +22,10 @@ Node* numPosition[32001];
 
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+
 	cin >> n >> m;
 	memset(numPosition, 0, sizeof(numPosition));
 
@@ -144,6 +148,12 @@ int main()
 	{
 		cout << first->num << ' ';
 		first = first->next;
+	}
+
+	for (int i = 1; i <= n; i++)
+	{
+		if (numPosition[i])
+			delete numPosition[i];
 	}
 }
 
