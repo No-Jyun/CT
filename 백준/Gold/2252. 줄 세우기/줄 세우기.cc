@@ -145,12 +145,6 @@ int main()
 		cout << first->num << ' ';
 		first = first->next;
 	}
-
-	for (int i = 1; i <= n; i++)
-	{
-		if (numPosition[i])
-			delete numPosition[i];
-	}
 }
 
 // 4 2 3 1 5 6
