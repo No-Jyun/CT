@@ -1,12 +1,12 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
 using namespace std;
 
 int n;
-map<string, vector<int>> m;
+unordered_map<string, vector<int>> m;
 vector<string> origin;
 
 int main()
