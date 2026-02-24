@@ -6,9 +6,14 @@ using namespace std;
 
 #define DAME 9999999
 
+struct DATA
+{
+	int i, j, k, dist;
+};
+
 int n, m, k;
 int miro[1001][1001];
-int chk[1001][1001][11];
+bool chk[1001][1001][11];
 
 int mI[4] = { -1,0,1,0 };
 int mJ[4] = { 0,1,0,-1 };
@@ -33,49 +38,41 @@ int main()
 		for (int j = 1; j <= m; j++)
 		{
 			miro[i][j] = str[j - 1];
-
-			for (int t = 0; t <= k; t++)
-				chk[i][j][t] = DAME;
 		}
 	}
 
-	for (int t = 0; t <= k; t++)
-		chk[1][1][t] = 1;
-
-	queue<vector<int>> q;
-	q.push({ 1,1,k });
+	queue<DATA> q;
+	q.push({ 1,1,k ,1 });
+	int minV = -1;
 
 	while (!q.empty())
 	{
-		int nowI = q.front()[0];
-		int nowJ = q.front()[1];
-		int nowK = q.front()[2];
+		int nowI = q.front().i;
+		int nowJ = q.front().j;
+		int nowK = q.front().k;
+		int dist = q.front().dist;
 		q.pop();
 
 		if (nowI == n && nowJ == m)
-			continue;
-
-		//cout << "i : " << nowI << ", j : " << nowJ << ", k : " << nowK
-		//	<< ", chk : " << chk[nowI][nowJ][nowK] << "\n";
+		{
+			minV = dist;
+			break;			
+		}
 
 		for (int d = 0; d < 4; d++)
 		{
 			int gotoI = nowI + mI[d];
 			int gotoJ = nowJ + mJ[d];
 
-			//cout << "i : " << nowI << ", j : " << nowJ << ", gotoi : " << gotoI
-			//	<< ", gotoj : " << gotoJ << "\n";
-
-
 			if (!Movable(gotoI, gotoJ))
 				continue;
 
 			if (miro[gotoI][gotoJ] == '0')
 			{
-				if (chk[gotoI][gotoJ][nowK] > chk[nowI][nowJ][nowK] + 1)
+				if (!chk[gotoI][gotoJ][nowK])
 				{
-					chk[gotoI][gotoJ][nowK] = chk[nowI][nowJ][nowK] + 1;
-					q.push({ gotoI,gotoJ,nowK });
+					chk[gotoI][gotoJ][nowK] = true;
+					q.push({ gotoI,gotoJ,nowK, dist + 1 });
 				}
 			}
 			else
@@ -83,23 +80,14 @@ int main()
 				if (nowK == 0)
 					continue;
 
-				if (chk[gotoI][gotoJ][nowK - 1] > chk[nowI][nowJ][nowK] + 1)
+				if (!chk[gotoI][gotoJ][nowK - 1])
 				{
-					chk[gotoI][gotoJ][nowK - 1] = chk[nowI][nowJ][nowK] + 1;
-					q.push({ gotoI,gotoJ,nowK - 1 });
+					chk[gotoI][gotoJ][nowK - 1] = true;
+					q.push({ gotoI,gotoJ,nowK - 1, dist + 1 });
 				}
 			}
 		}
 	}
 	
-	int minV = DAME;
-	for (int i = 0; i <= k; i++)
-	{
-		minV = min(minV, chk[n][m][i]);
-	}
-
-	if (minV == DAME)
-		cout << -1;
-	else
-		cout << minV;
+	cout << minV;
 }
