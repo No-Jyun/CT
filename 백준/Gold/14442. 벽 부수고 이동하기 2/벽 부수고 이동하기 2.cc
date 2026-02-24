@@ -47,10 +47,11 @@ int main()
 
 	while (!q.empty())
 	{
-		int nowI = q.front().i;
-		int nowJ = q.front().j;
-		int nowK = q.front().k;
-		int dist = q.front().dist;
+		DATA data = q.front();
+		int nowI = data.i;
+		int nowJ = data.j;
+		int nowK = data.k;
+		int dist = data.dist;
 		q.pop();
 
 		if (nowI == n && nowJ == m)
