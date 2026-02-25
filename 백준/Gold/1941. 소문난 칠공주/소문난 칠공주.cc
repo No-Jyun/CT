@@ -3,16 +3,19 @@
 #include <queue>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
 char jari[6][6];
-vector<vector<pair<int,int>>> answer;
+set<int> uniqueSet; 
+int answer;
 vector<pair<int, int>> stP;
 
 struct Data
 {
 	int i = 0, j = 0;
+	int mask = 0;
 	int yCount = 0;
 	vector<pair<int, int>> trail;
 	bool chk[6][6] = { false, };
@@ -42,17 +45,17 @@ int main()
 	for(int ix = 0; ix < stP.size(); ix++)
 	{
 		pair<int, int> st = stP[ix];
-
 		Data stD;
 		stD.i = st.first;
 		stD.j = st.second;
 		stD.trail.push_back({ st });
 		stD.chk[stD.i][stD.j] = true;
+		
+		stD.mask = (1 << ((stD.i - 1) * 5) + stD.j);
+		uniqueSet.insert(stD.mask);
 
 		queue<Data> q;
 		q.push(stD);
-
-		vector<vector<pair<int, int>>> cases;
 
 		while (!q.empty())
 		{
@@ -63,8 +66,7 @@ int main()
 
 			if (data.trail.size() == 7)
 			{
-				sort(data.trail.begin(), data.trail.end());
-				cases.emplace_back(data.trail);
+				answer++;
 				continue;
 			}
 
@@ -78,36 +80,29 @@ int main()
 					int gotoI = nowI + mI[d];
 					int gotoJ = nowJ + mJ[d];
 
-					if (!IsMovable(gotoI, gotoJ)) continue;
-					if (data.chk[gotoI][gotoJ]) continue;
-
+					if (!IsMovable(gotoI, gotoJ) || data.chk[gotoI][gotoJ]) continue;
+					
 					Data pushD = data;
 					pushD.i = gotoI;
 					pushD.j = gotoJ;
 					pushD.trail.push_back({ gotoI,gotoJ });
 					pushD.chk[gotoI][gotoJ] = true;
+					pushD.mask = data.mask | ((1 << ((gotoI - 1) * 5) + gotoJ));
 
 					if (jari[gotoI][gotoJ] == 'Y')
 					{
 						pushD.yCount++;
 					}
 
+					if (uniqueSet.count(pushD.mask)) continue;
+
+					uniqueSet.insert(pushD.mask);
+
 					q.emplace(pushD);
 				}
 			}
 		}
-
-		sort(cases.begin(), cases.end());
-		cases.erase(unique(cases.begin(), cases.end()), cases.end());
-
-		for (auto con : cases)
-		{
-			answer.emplace_back(con);
-		}
-
-		sort(answer.begin(), answer.end());
-		answer.erase(unique(answer.begin(), answer.end()), answer.end());
 	}
 
-	cout << (int)answer.size();
+	cout << answer;
 }
