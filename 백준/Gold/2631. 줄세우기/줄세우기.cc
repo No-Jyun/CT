@@ -1,41 +1,46 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <stack>
-#include <map>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <string>
-#include <cstring>
-#include <cmath>	// abs for float, double
-#include <cstdlib> // abs for int, long int
-#define ULL unsigned long long
-#define INTMAX 2147483647
+
 using namespace std;
 
-int n;
-int arr[201];
-int dp[201];
-int result;
-
-int main() {
+int main()
+{
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
+	int n;
 	cin >> n;
-	for (int i = 1; i <= n; i++) cin >> arr[i];
 
-	dp[1] = 1;
-	for (int i = 2; i <= n; i++) {
-		int t = 1;
-		for (int j = i - 1; j >= 1; j--) {
-			if (arr[i] > arr[j]) t = max(t, dp[j] + 1);
+	vector<int> v(n + 1);
+	for (int i = 1; i <= n; i++)
+		cin >> v[i];
+
+	int maxN = 1;
+	vector<int>dp(n + 1, 1);
+	for (int i = 2; i <= n; i++)
+	{
+		for (int j = i - 1; j >= 1; j--)
+		{
+			if (v[j] < v[i])
+				dp[i] = max(dp[i], 1 + dp[j]);
 		}
-		dp[i] = t;
-		result = max(result, dp[i]);
+		maxN = max(maxN, dp[i]);
 	}
-
-	cout << n - result;
+	cout << n - maxN;
 }
+
+//3752614
+//
+//1 2 3 4 5 6 7
+//1 2 2 1 3 1 2
+//
+//1 2 3 4 5 6 7
+//6 5 4 3 2 1 0
+//5 3 0 3 
+//
+//3526147
+//
+//1 2 3 4 5 6 7
+//0 1 2 0 3 2 0
+//
