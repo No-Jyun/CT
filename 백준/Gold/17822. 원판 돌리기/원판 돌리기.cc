@@ -39,7 +39,7 @@ void PostProcess()
 
 	bool chk[51][51] = {};
 
-	queue<pair<int, int>> restN;
+	queue<pair<int, int>> q;
 	for (int i = 1; i <= n; i++)
 	{
 		for (int j = 1; j <= m; j++)
@@ -48,12 +48,10 @@ void PostProcess()
 			if (onepan[i][j] != 0) 
 			{
 				nCount++;
-				restN.push({ i,j });
 			}
 
 			if (onepan[i][j] == 0 || chk[i][j]) continue;
 
-			queue<pair<int, int>> q;
 			queue<pair<int, int>> ansQ;
 			chk[i][j] = true;
 			q.push({ i,j });
@@ -122,14 +120,19 @@ void PostProcess()
 
 	if (!isSame)
 	{
-		while (!restN.empty())
+		if (nCount == 0)return;
+
+		for (int i = 1; i <= n; i++)
 		{
-			int curN = onepan[restN.front().first][restN.front().second];
+			for (int j = 1; j <= m; j++)
+			{
+				int curN = onepan[i][j];
+				if (curN == 0)continue;
 
-			if (curN * nCount > sum) onepan[restN.front().first][restN.front().second] = curN - 1;
-			else if (curN * nCount < sum) onepan[restN.front().first][restN.front().second] = curN + 1;
-
-			restN.pop();
+				//// 중요 포인트
+				if (curN * nCount > sum) onepan[i][j] = curN - 1;
+				else if (curN * nCount < sum) onepan[i][j] = curN + 1;
+			}
 		}
 	}
 }
