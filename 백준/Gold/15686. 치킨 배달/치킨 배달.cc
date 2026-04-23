@@ -1,81 +1,82 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
-#include <stack>
-#include <map>
-#include <unordered_map>
-#include <queue>
-#include <deque>
-#include <string>
-#include <cstring>
-#include <cmath>	// abs for float, double
-#include <cstdlib> // abs for int, long int
-#define ULL unsigned long long
+#include <cmath>
+
 using namespace std;
 
-int m, n, chickenNum;
-int minV = 999999999;
-vector<pair<int, int>> chicken, city;
-int chickIndex[14];
+int n, m;
+int houseIndex = 0;
+int chickenIndex = 0;
+int answer = 999999999;
 
-int ChkCitytoChick(int cityIndex) {
-	int cityI = city[cityIndex].first;
-	int cityJ = city[cityIndex].second;
+pair<int, int> house[100];
+pair<int, int> chicken[13];
+int selChicken[13];
 
-	int tmp = 999999999;
-	for (int i = 1; i <= m; i++) {
-		int chickI = chicken[chickIndex[i]].first;
-		int chickJ = chicken[chickIndex[i]].second;
+void CalLength()
+{
+	int minSum = 0;
+	for (int i = 0; i < houseIndex; i++)
+	{
+		int curI = house[i].first;
+		int curJ = house[i].second;
+		int minL = 999999999;
 
-		int length = abs(cityI - chickI) + abs(cityJ - chickJ);
-		tmp = min(tmp, length);
+		for (int j = 0; j < m; j++)
+		{
+			int toI = chicken[selChicken[j]].first;
+			int toJ = chicken[selChicken[j]].second;
+
+			int length = abs(curI - toI) + abs(curJ - toJ);
+			minL = minL > length ? length : minL;
+		}
+		minSum += minL;
 	}
-	return tmp;
+
+	answer = answer > minSum ? minSum : answer;
 }
 
-void ChkLen() {
-	int sum = 0;
-	for (int i = 0; i < city.size(); i++) {
-		sum += ChkCitytoChick(i);
-	}
-	minV = min(minV, sum);
-}
-
-void CHICKI(int index, int next) {
-	if (index > m) {
-		ChkLen();
-
+void SelectChicken(int curIndex, int index)
+{
+	if (curIndex >= m)
+	{
+		CalLength();
 		return;
 	}
 
-	for (int i = next + 1; i < chickenNum; i++) {
-		chickIndex[index] = i;
-		CHICKI(index + 1, i);
+	for (int i = index; i < chickenIndex; i++)
+	{
+		selChicken[curIndex] = i;
+		SelectChicken(curIndex + 1, i + 1);
 	}
 }
 
-int main() {
+int main()
+{
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
 	cin >> n >> m;
 
-	for (int i = 1; i <= n; i++) {
-		for (int j = 1; j <= n; j++) {
-			int a;
-			cin >> a;
-			if (a == 1) {
-				city.push_back({ i,j });
-			}
-			else if (a == 2) {
-				chicken.push_back({ i,j });
-				chickenNum++;
-			}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			int c;
+			cin >> c;
+
+			if (c == 2)
+				chicken[chickenIndex++] = { i,j };
+			else if (c == 1)
+				house[houseIndex++] = { i,j };
 		}
 	}
 
-	CHICKI(1, -1);
+	for (int i = 0; i < chickenIndex; i++)
+	{
+		selChicken[0] = i;
+		SelectChicken(1, i + 1);
+	}
 
-	cout << minV;
+	cout << answer;
 }
